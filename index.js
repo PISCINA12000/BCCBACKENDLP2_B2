@@ -5,17 +5,22 @@
 //const express = require('express'); commonJS
 //vamos utilizar o padrão modular para importar os módulos
 //não esqueça de atualizar o arquivo package.json adicionando a chave "type":"module"
-import express from 'express';
-import rotaProduto from './Rotas/rotaProdutos.js';
-import cors from 'cors';
+import express from 'express'
+import rotaProduto from './Rotas/rotaProdutos.js'
+import cors from 'cors'
+import dotenv from 'dotenv'
+
+/*carregar as variáveis de ambiente a partir do arquivo
+    .env localizado na raiz do projeto*/
+dotenv.config()
 
 
-const host = "0.0.0.0"; //todas as placas de rede do computador que está executando a aplicação
-const porta = 3000;
+const host = "0.0.0.0" //todas as placas de rede do computador que está executando a aplicação
+const porta = 3000
 
-const app = express(); //aplicação completa HTTP
+const app = express() //aplicação completa HTTP
 //prepara a aplicação para processar dados no formato JSON
-app.use(express.json());
+app.use(express.json())
 
 //configurar a aplicação para responder requisições não importando a origem
 app.use(cors({
@@ -24,10 +29,10 @@ app.use(cors({
         }));
 
 //app utilize a pasta 'publico' para disponibilizar o conteúdo ali armazenado
-app.use(express.static('./publico'));
+app.use(express.static('./publico'))
 
 
-app.use('/produtos', rotaProduto);
+app.use('/produtos', rotaProduto)
 //app.use('/clientes',rotaCliente);
 //app.use('/fornecedores', rotaFornecedor);
 //app.use('/usuarios', rotaUsuario);
@@ -56,4 +61,4 @@ app.get('/tabuada',(requisicao, resposta)=>{
 
 app.listen(porta, host, () => {
     console.log(`Servidor escutando em http://${host}:${porta}`)
-});
+})
