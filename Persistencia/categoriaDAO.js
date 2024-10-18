@@ -1,5 +1,5 @@
 import conectar from "./Conexao.js"
-import Categoria from "../Modelo/categoria";
+import Categoria from "../Modelo/categoria.js";
 
 export default class CategoriaDAO{
     
@@ -13,9 +13,11 @@ export default class CategoriaDAO{
                 CREATE TABLE IF NOT EXISTS categoria(
                     codigo INT NOT NULL AUTO_INCREMENT,
                     descricao VARCHAR(50) NOT NULL,
+
                     CONSTRAINT pk_categoria
-                        PRIMARY KEY codigo
-                );`
+                        PRIMARY KEY (codigo)
+                );
+                `
             await conexao.execute(sql)
             await conexao.release()
         }
