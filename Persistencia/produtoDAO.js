@@ -26,8 +26,7 @@ export default class ProdutoDAO {
                     PRIMARY KEY(prod_codigo),
                 CONSTRAINT prod_fk_categoria
                     FOREIGN KEY (prod_fk_codigo_cat) REFERENCES categoria (codigo)
-            );
-        `;
+            );`
             await conexao.execute(sql);
             await conexao.release();
         }

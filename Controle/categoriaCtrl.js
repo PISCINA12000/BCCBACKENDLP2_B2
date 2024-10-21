@@ -1,40 +1,32 @@
 //É a classe responsável por traduzir requisições HTTP e produzir respostas HTTP
-import Produto from "../Modelo/produto.js";
-import Categoria from "../Modelo/categoria.js"
+import Categoria from "../Modelo/categoria.js";
 
-export default class ProdutoCtrl{
+export default class CategoriaCtrl{
 
     gravar(requisicao, resposta){
         //preparar o destinatário que a resposta estará no formato JSON
         resposta.type("application/json");
         //Verificando se o método da requisição é POST e conteúdo é JSON
         if (requisicao.method == 'POST' && requisicao.is("application/json")){
-            const descricao  = requisicao.body.descricao;
-            const precoCusto = requisicao.body.precoCusto;
-            const precoVenda = requisicao.body.precoVenda;
-            const qtdEstoque = requisicao.body.qtdEstoque;
-            const urlImagem  = requisicao.body.urlImagem;
-            const dataValidade = requisicao.body.dataValidade;
-            const categoria = requisicao.body.Categoria;
+            const nome  = requisicao.body.nome;
             //pseudo validação
-            if (descricao && precoCusto > 0 && precoVenda > 0 && qtdEstoque >= 0 && urlImagem && dataValidade && categoria.codigo>0)
+            if (nome)
             {
-                //gravar o produto
-                const categ = new Categoria(categoria.codigo)
-                const produto = new Produto(0, descricao, precoCusto, precoVenda, qtdEstoque,urlImagem,dataValidade,categ)
+                //gravar a categoria
+                const categoria = new Categoria(0,nome);
                 
-                produto.incluir()
+                categoria.gravar()
                 .then(()=>{
                     resposta.status(200).json({
                         "status":true,
-                        "mensagem":"Produto adicionado com sucesso!",
-                        "codigo": produto.codigo
+                        "mensagem":"Categoria adicionada com sucesso!",
+                        "codigo": categoria.codigo
                     });
                 })
                 .catch((erro)=>{
                     resposta.status(500).json({
                         "status":false,
-                        "mensagem":"Não foi possível incluir o produto: " + erro.message
+                        "mensagem":"Não foi possível incluir a categoria: " + erro.message
                     });
                 });
             }
@@ -43,7 +35,7 @@ export default class ProdutoCtrl{
                 resposta.status(400).json(
                     {
                         "status":false,
-                        "mensagem":"Informe corretamente todos os dados de um produto conforme documentação da API."
+                        "mensagem":"Informe corretamente todos os dados de uma categoria conforme documentação da API."
                     }
                 );
             }
@@ -67,28 +59,23 @@ export default class ProdutoCtrl{
         if ((requisicao.method == 'PUT' || requisicao.method == 'PATCH') && requisicao.is("application/json")){
             //o código será extraída da URL (padrão REST)
             const codigo     = requisicao.params.codigo;
-            const descricao  = requisicao.body.descricao;
-            const precoCusto = requisicao.body.precoCusto;
-            const precoVenda = requisicao.body.precoVenda;
-            const qtdEstoque = requisicao.body.qtdEstoque;
-            const urlImagem  = requisicao.body.urlImagem;
-            const dataValidade = requisicao.body.dataValidade;
+            const nome  = requisicao.body.nome;
             //pseudo validação
-            if (codigo > 0 && descricao && precoCusto > 0 && precoVenda > 0 && qtdEstoque >= 0 && urlImagem && dataValidade)
+            if (codigo > 0 && nome)
             {
-                //alterar o produto
-                const produto = new Produto(codigo, descricao, precoCusto, precoVenda, qtdEstoque,urlImagem,dataValidade);
-                produto.alterar()
+                //alterar o categoria
+                const categoria = new Categoria(codigo,nome);
+                categoria.alterar()
                 .then(()=>{
                     resposta.status(200).json({
                         "status":true,
-                        "mensagem":"Produto alterado com sucesso!",
+                        "mensagem":"Categoria alterada com sucesso!",
                     });
                 })
                 .catch((erro)=>{
                     resposta.status(500).json({
                         "status":false,
-                        "mensagem":"Não foi possível alterar o produto: " + erro.message
+                        "mensagem":"Não foi possível alterar a categoria: " + erro.message
                     });
                 });
             }
@@ -97,7 +84,7 @@ export default class ProdutoCtrl{
                 resposta.status(400).json(
                     {
                         "status":false,
-                        "mensagem":"Informe corretamente todos os dados de um produto conforme documentação da API."
+                        "mensagem":"Informe corretamente todos os dados de uma categoria conforme documentação da API."
                     }
                 );
             }
@@ -123,19 +110,19 @@ export default class ProdutoCtrl{
             //pseudo validação
             if (codigo > 0)
             {
-                //alterar o produto
-                const produto = new Produto(codigo);
-                produto.excluir()
+                //alterar o categoria
+                const categoria = new Categoria(codigo);
+                categoria.excluir()
                 .then(()=>{
                     resposta.status(200).json({
                         "status":true,
-                        "mensagem":"Produto excluído com sucesso!",
+                        "mensagem":"Categoria excluída com sucesso!",
                     });
                 })
                 .catch((erro)=>{
                     resposta.status(500).json({
                         "status":false,
-                        "mensagem":"Não foi possível excluir o produto: " + erro.message
+                        "mensagem":"Não foi possível excluir a categoria: " + erro.message
                     });
                 });
             }
@@ -144,7 +131,7 @@ export default class ProdutoCtrl{
                 resposta.status(400).json(
                     {
                         "status":false,
-                        "mensagem":"Informe um código válido de um produto conforme documentação da API."
+                        "mensagem":"Informe um código válido de uma categoria conforme documentação da API."
                     }
                 );
             }
@@ -169,14 +156,14 @@ export default class ProdutoCtrl{
                 codigo = "";
             }
 
-            const produto = new Produto();
-            //método consultar retorna uma lista de produtos
-            produto.consultar(codigo)
-            .then((listaProdutos) =>{
-                resposta.status(200).json(listaProdutos
+            const categoria = new Categoria();
+            //método consultar retorna uma lista de categorias
+            categoria.consultar(codigo)
+            .then((listaCategorias) =>{
+                resposta.status(200).json(listaCategorias
                     /*{
                         "status": true,
-                        "listaProdutos": listaProdutos
+                        "listacategorias": listacategorias
                     }*/
                 );
             })
@@ -184,7 +171,7 @@ export default class ProdutoCtrl{
                 resposta.status(500).json(
                     {
                         "status":false,
-                        "mensagem":"Erro ao consultar produtos"    
+                        "mensagem":"Erro ao consultar categorias!!"    
                     }
                 );
             });

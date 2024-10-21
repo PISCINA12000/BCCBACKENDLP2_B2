@@ -30,7 +30,7 @@ export default class CategoriaDAO{
         if(categoria instanceof Categoria){
             const conexao = await conectar()
             const sql = "INSERT INTO categoria(descricao) VALUES ?"
-            const parametros = [categoria.descricao]
+            const parametros = [categoria.nome]
             const resultado = await conexao.execute(sql,parametros)
             categoria.codigo = resultado[0].insertId
             await conexao.release()

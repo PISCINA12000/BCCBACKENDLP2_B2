@@ -27,8 +27,8 @@ export default class Categoria{
 
     toJSON() {
         return {
-            codigo: this.#codigo,
-            nome: this.#nome
+            "codigo": this.#codigo,
+            "nome": this.#nome
         };
     }
 
